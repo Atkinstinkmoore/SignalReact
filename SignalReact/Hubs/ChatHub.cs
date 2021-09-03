@@ -36,13 +36,11 @@ namespace SignalReact.Hubs
             room.Users.Add(user);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, room.RoomName);
-            var message = new ChatMessage(new User() { UserName = "Bottis", RoomName = user.RoomName },
-                      $"{user.UserName} har anslutit till chatten");
-            var userMessage = new ChatMessage(new User() { UserName = "Bottis", RoomName = user.RoomName },
-                      $"Välkommen till chatten {user.UserName}");
+            var message = $"{user.UserName} har anslutit till chatten";
+            var userMessage = $"Välkommen till chatten {user.UserName}";
 
-            await Clients.Group(room.RoomName).SendAsync("RecieveMessage", message);
-            await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage", userMessage);
+            await Clients.Group(room.RoomName).SendAsync("RecieveMessage","Bottis", message);
+            await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage","Bottis", userMessage);
 
 
         }
@@ -57,16 +55,15 @@ namespace SignalReact.Hubs
 
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, room.RoomName);
 
-                var message = new ChatMessage(new User(){ UserName = "Bottis", RoomName = user.RoomName },
-                    $"{user.UserName} har lämnat chatten");
+                var message = $"{user.UserName} har lämnat chatten";
 
-                await Clients.Group(room.RoomName).SendAsync("RecieveMessage", message);
+                await Clients.Group(room.RoomName).SendAsync("RecieveMessage", "Bottis", message);
 
             }
         }
-        public async Task SendMessage(ChatMessage message)
+        public async Task SendMessage(string user, string room, string message)
         {
-            await Clients.Group(message.User.RoomName).SendAsync("RecieveMessage", message);
+            await Clients.Group(room).SendAsync("RecieveMessage", user, message);
 
         }
     }

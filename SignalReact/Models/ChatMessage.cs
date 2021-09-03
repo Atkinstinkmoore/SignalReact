@@ -7,15 +7,13 @@ namespace SignalReact.Models
 {
     public class ChatMessage
     {
-        public User User { get; set; }
+        public string UserName { get; set; }
         public string Message { get; set; }
-        public DateTime TimeStamp { get; set; }
 
-        public ChatMessage(User user, string message)
+        public ChatMessage(string user, string message)
         {
-            User = user;
+            UserName = user;
             Message = message;
-            TimeStamp = DateTime.UtcNow;
         }
     }
 }

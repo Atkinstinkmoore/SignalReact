@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useChat } from '../contexts/ChatContext';
 
 export default function Login() {
-  const {user, room, setUser, setRoom, loggedIn, joinRoom} = useChat();
+  const {user, room, setUser, setRoom, connection, joinRoom} = useChat();
 
   return (
-    <> {!loggedIn && (
+    <> {!connection && (
     <form className="login-form"
       onSubmit={e=> {
         e.preventDefault(user, room);
