@@ -21,11 +21,12 @@ export default function Login() {
     <> {!connection && (
     <form className="login-form"
       onSubmit={e=> {
-        e.preventDefault(user, room);
+        e.preventDefault();
         joinRoom(user, room);
       }}>
       <input type="text" placeholder="Namn" onChange={e => setUser(e.target.value)} />
       <select name="rooms" onChange={e => setRoom(e.target.value)}>
+        <option value="" disabled selected>Välj ett chattrum</option>
         {rooms && rooms.map(r => { return <option value={r}>{r}</option>})}
       </select>
       <button type="submit" disabled={!user || !room}>Logga in</button>

@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { useChat } from "../contexts/ChatContext";
+import ChatForm from "./ChatForm";
 import ChatMessage from "./ChatMessage";
 
 const ChatContainer = () => {
@@ -14,6 +15,7 @@ const ChatContainer = () => {
             <>
                 {chat.map(msg => {return <ChatMessage msg={msg}/>})}
             </>
+            <ChatForm />
             </>
             )}
       </>
