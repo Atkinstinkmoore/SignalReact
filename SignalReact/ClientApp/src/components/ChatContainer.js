@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import { useChat } from "../contexts/ChatContext";
+import ChatMessage from "./ChatMessage";
 
 const ChatContainer = () => {
     const {connection, chat, user, room} = useChat()
@@ -8,8 +9,10 @@ const ChatContainer = () => {
         <>
         {connection && (
             <>
-            <h2>Nu är du i rum {room}, {user}</h2>
-            {chat.map(msg => {return <p>{msg.message}</p>})}
+            <h2>{room}</h2>
+            <>
+                {chat.map(msg => {return <ChatMessage msg={msg}/>})}
+            </>
             </>
             )}
       </>

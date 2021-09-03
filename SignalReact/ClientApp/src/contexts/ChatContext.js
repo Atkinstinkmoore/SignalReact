@@ -12,7 +12,7 @@ export default function ChatProvider({children}) {
   const [room, setRoom] = useState();
   const [chat, setChat] = useState([]);
   const latestChat = useRef(null);
-  const [connection, setConnection] = useState()
+  const [connection, setConnection] = useState(null)
 
   latestChat.current = chat;
 
@@ -31,7 +31,7 @@ export default function ChatProvider({children}) {
 
         connection.on('RecieveMessage', (user, message) => {
           const updatedChat = [...latestChat.current];
-          updatedChat.push({name: user, message: message});
+          updatedChat.push({name: user, message: message, timeStamp: Date.now()});
 
           setChat(updatedChat);
         });
@@ -50,6 +50,14 @@ const sendMessage = async (message) => {
     console.error(error.message);
   }
 }
+const logOut = async () => {
+  try {
+    await connection.invoke("LeaveRoom", {userName: user, roomName: room})
+    setConnection(null);
+  } catch (error) {
+    console.error(error.message)
+  }
+}
 
 
   const value = {
@@ -59,7 +67,9 @@ const sendMessage = async (message) => {
     setRoom,
     joinRoom,
     chat,
-    connection
+    connection,
+    sendMessage,
+    logOut
   };
 
   return (
