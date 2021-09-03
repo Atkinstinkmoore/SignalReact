@@ -25,8 +25,8 @@ export default function Login() {
         joinRoom(user, room);
       }}>
       <input type="text" placeholder="Namn" onChange={e => setUser(e.target.value)} />
-      <select name="rooms" onChange={e => setRoom(e.target.value)}>
-        <option value="" disabled selected>Välj ett chattrum</option>
+      <select name="rooms" onChange={e => setRoom(e.target.value)} defaultValue={"DEFAULT"}>
+        <option value="DEFAULT" disabled>Välj ett chattrum</option>
         {rooms && rooms.map(r => { return <option value={r}>{r}</option>})}
       </select>
       <button type="submit" disabled={!user || !room}>Logga in</button>
