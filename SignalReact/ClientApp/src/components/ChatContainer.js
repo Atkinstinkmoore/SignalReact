@@ -10,12 +10,16 @@ const ChatContainer = () => {
         <>
         {connection && (
             <>
-            <button onClick={() => logOut()}>Logga ut</button>
-            <h2>{room}</h2>
-            <>
-                {chat.map(msg => {return <ChatMessage msg={msg}/>})}
-            </>
-            <ChatForm />
+                <header>
+                    <h2>{room}</h2>
+                    <button onClick={() => logOut()}>Logga ut</button>
+                </header>
+                <main>
+                <div>
+                    {chat.map(msg => {return <ChatMessage msg={msg}/>})}
+                </div>
+                <ChatForm />
+                </main>
             </>
             )}
       </>

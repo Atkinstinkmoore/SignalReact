@@ -7,10 +7,11 @@ export default function ChatForm() {
   return (
     <form onSubmit={e=>{
       e.preventDefault();
-      sendMessage(message)
+      sendMessage(message);
+      e.target.reset();
     }}>
       <input type="text" id="message-box"
-      required onChange={e => setMessage(e.target.value)}/>
+      required onChange={e => setMessage(e.target.value)} autoComplete="off"/>
       <div>emoji</div>
     </form>
   )
