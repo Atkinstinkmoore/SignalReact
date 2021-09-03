@@ -1,14 +1,11 @@
-/* Provide sufficient contrast against white background */
-a {
-  color: #0366d6;
-}
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
 
-code {
-  color: #E01A76;
+  padding: 0.5em;
 }
-
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+div {
+  border: 1px solid;
 }
