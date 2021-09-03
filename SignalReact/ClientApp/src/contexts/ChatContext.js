@@ -76,7 +76,7 @@ const logOut = async () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <ChatContext.Provider value={value}>{children}</ChatContext.Provider>
     </div>
   )
