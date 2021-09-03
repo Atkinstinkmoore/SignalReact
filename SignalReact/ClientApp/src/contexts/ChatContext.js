@@ -31,7 +31,9 @@ export default function ChatProvider({children}) {
 
         connection.on('RecieveMessage', (user, message, server) => {
           const updatedChat = [...latestChat.current];
-          updatedChat.push({name: user, message: message, timeStamp: Date.now(), server: server});
+          const timeElapsed = Date.now();
+          const date = new Date(timeElapsed);
+          updatedChat.push({name: user, message: message, timeStamp: `${date.getHours()}:${date.getMinutes()}`, server: server});
 
           setChat(updatedChat);
         });
