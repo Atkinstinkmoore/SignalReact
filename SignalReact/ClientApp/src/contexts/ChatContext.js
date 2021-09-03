@@ -29,9 +29,9 @@ export default function ChatProvider({children}) {
 
         await connection.start();
 
-        connection.on('RecieveMessage', (user, message) => {
+        connection.on('RecieveMessage', (user, message, server) => {
           const updatedChat = [...latestChat.current];
-          updatedChat.push({name: user, message: message, timeStamp: Date.now()});
+          updatedChat.push({name: user, message: message, timeStamp: Date.now(), server: server});
 
           setChat(updatedChat);
         });
@@ -54,6 +54,7 @@ const logOut = async () => {
   try {
     await connection.invoke("LeaveRoom", {userName: user, roomName: room})
     setConnection(null);
+    setChat([]);
   } catch (error) {
     console.error(error.message)
   }

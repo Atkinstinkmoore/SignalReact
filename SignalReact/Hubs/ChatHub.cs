@@ -12,6 +12,7 @@ namespace SignalReact.Hubs
     public class ChatHub : Hub
     {
         private readonly IRepo _db;
+        private readonly string botname = "Bottis";
 
         public ChatHub(IRepo db)
         {
@@ -22,11 +23,11 @@ namespace SignalReact.Hubs
         {
 
             var message = $"{user.UserName} har anslutit till chatten";
-            await Clients.Group(user.RoomName).SendAsync("RecieveMessage","Bottis", message);
+            await Clients.Group(user.RoomName).SendAsync("RecieveMessage",botname, message);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, user.RoomName);
             var userMessage = $"Välkommen till chatten {user.UserName}";
-            await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage","Bottis", userMessage);
+            await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage",botname, userMessage, true);
 
 
         }
@@ -37,13 +38,13 @@ namespace SignalReact.Hubs
 
                 var message = $"{user.UserName} har lämnat chatten";
 
-                await Clients.Group(user.RoomName).SendAsync("RecieveMessage", "Bottis", message);
+                await Clients.Group(user.RoomName).SendAsync("RecieveMessage", botname, message, true);
 
             
         }
         public async Task SendMessage(string user, string room, string message)
         {
-            await Clients.Group(room).SendAsync("RecieveMessage", user, message);
+            await Clients.Group(room).SendAsync("RecieveMessage", user, message, false);
 
         }
 
