@@ -9,18 +9,18 @@ const ChatContainer = () => {
     return (
         <>
         {connection && (
-            <>
-                <header>
-                    <h2>{room}</h2>
-                    <button onClick={() => logOut()}>Logga ut</button>
+            <div className="chat-container">
+                <header className="header">
+                    <h2 className="room">{room}</h2>
+                    <button className="btn" onClick={() => logOut()}>Logga ut</button>
                 </header>
-                <main>
-                <div>
+                <main className="main">
+                <>
                     {chat.map(msg => {return <ChatMessage msg={msg}/>})}
-                </div>
-                <ChatForm />
+                </>
                 </main>
-            </>
+                <ChatForm />
+            </div>
             )}
       </>
     )

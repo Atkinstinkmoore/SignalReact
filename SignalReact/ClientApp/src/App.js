@@ -11,7 +11,7 @@ const App = () => {
         <>
         <ChatProvider>
             <Login />
-            <ChatContainer></ChatContainer>
+            <ChatContainer />
         </ChatProvider>
         </>
     );
