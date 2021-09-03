@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.SignalR;
 using SignalReact.Models;
 using SignalReact.Repo;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SignalReact.Hubs
 {
-    public class ChatHub : Hub<IChatClient>
+    public class ChatHub : Hub
     {
         private readonly IRepo _db;
 
@@ -16,73 +17,57 @@ namespace SignalReact.Hubs
         {
             _db = db;
         }
-        public override async Task OnConnectedAsync()
+
+        public async Task JoinRoom(User user)
         {
-            var user = _db.Users.SingleOrDefault(u => u.UserName == Context.User.Identity.Name);
-
-            if(user == null)
-            {
-                user = new User()
-                {
-                    UserName = Context.User.Identity.Name
-                };
-                _db.Users.Add(user);
-            }
-
-            await base.OnConnectedAsync();
-        }
-
-        public async Task AddToRoom(string roomName)
-        {
-            var room = _db.Rooms.Find(r => r.RoomName == roomName);
-            var user = _db.Users.SingleOrDefault(u => u.UserName == Context.User.Identity.Name);
+            var room = _db.Rooms.SingleOrDefault(r => r.RoomName == user.RoomName);
 
             if(room == null)
             {
                 room = new Room()
                 {
-                    RoomName = roomName
+                    RoomName = user.RoomName,
+                    Users = new List<User>()
                 };
+
+                _db.Rooms.Add(room);
             }
 
-            user.Room = room;
             room.Users.Add(user);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, room.RoomName);
-            var message = new ChatMessage("Bottis", $"{user.UserName} har anslutit till chatten");
+            var message = new ChatMessage(new User() { UserName = "Bottis", RoomName = user.RoomName },
+                      $"{user.UserName} har anslutit till chatten");
+            var userMessage = new ChatMessage(new User() { UserName = "Bottis", RoomName = user.RoomName },
+                      $"Välkommen till chatten {user.UserName}");
 
-            await Clients.Group(room.RoomName).RecieveMessage(message);
+            await Clients.Group(room.RoomName).SendAsync("RecieveMessage", message);
+            await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage", userMessage);
 
 
         }
-        public async Task RemoveFromRoom(string roomName)
+        public async Task LeaveRoom(User user)
         {
-            var room = _db.Rooms.Find(r => r.RoomName == roomName);
-            var user = _db.Users.SingleOrDefault(u => u.UserName == Context.User.Identity.Name);
+            var room = _db.Rooms.SingleOrDefault(r => r.RoomName == user.RoomName);
             if (room != null)
             {
 
-
-                user.Room = null;
+                user.RoomName = null;
                 room.Users.Remove(user);
 
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, room.RoomName);
 
-                var message = new ChatMessage("Bottis", $"{user.UserName} har lämnat chatten");
+                var message = new ChatMessage(new User(){ UserName = "Bottis", RoomName = user.RoomName },
+                    $"{user.UserName} har lämnat chatten");
 
-                await Clients.Group(room.RoomName).RecieveMessage(message);
+                await Clients.Group(room.RoomName).SendAsync("RecieveMessage", message);
 
             }
         }
         public async Task SendMessage(ChatMessage message)
         {
-            var user = _db.Users.SingleOrDefault(u => u.UserName == Context.User.Identity.Name);
+            await Clients.Group(message.User.RoomName).SendAsync("RecieveMessage", message);
 
-            if(user != null)
-            {
-                await Clients.Group(user.Room.RoomName).RecieveMessage(message);
-
-            }
         }
     }
 }

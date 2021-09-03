@@ -8,6 +8,6 @@ namespace SignalReact.Models
     public class User
     {
         public string UserName { get; set; }
-        public Room Room { get; set; }
+        public string RoomName { get; set; }
     }
 }

@@ -9,6 +9,12 @@ namespace SignalReact.Repo
     public class DBplaceholder : IRepo
     {
         public List<User> Users { get; set; }
-        List<Room> IRepo.Rooms { get; set; }
+        public List<Room> Rooms { get; set; }
+
+        public DBplaceholder()
+        {
+            Users = new List<User>();
+            Rooms = new List<Room>();
+        }
     }
 }

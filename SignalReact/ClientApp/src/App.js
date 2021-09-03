@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useState } from 'react';
+import ChatContainer from './components/ChatContainer';
+import Login from './components/Login';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import ChatProvider from './contexts/ChatContext';
 
 import './custom.css'
 
-function App() {
+const App = () => {
+
     return (
-        <h1>Hejsan</h1>
-    );  
+        <>
+        <ChatProvider>
+            <Login />
+            <ChatContainer></ChatContainer>
+        </ChatProvider>
+        </>
+    );
 }
 
 export default App;

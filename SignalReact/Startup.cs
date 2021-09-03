@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,17 @@ namespace SignalReact
 
             services.AddSignalR();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ClientPermission", policy =>
+                {
+                    policy.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:16015")
+                        .AllowCredentials();
+                });
+            });
+
             services.AddScoped<IRepo, DBplaceholder>();
 
             // In production, the React files will be served from this directory
@@ -50,12 +62,17 @@ namespace SignalReact
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+
+            app.UseCors("ClientPermission");
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>("/hubs/chat");
+                endpoints.MapHub<ChatHub>("/chat", options =>
+                {
+                    options.Transports = HttpTransportType.WebSockets | HttpTransportType.LongPolling;
+                });
             });
 
             app.UseSpa(spa =>
