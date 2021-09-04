@@ -29,7 +29,7 @@ export default function Login() {
         <option value="DEFAULT" disabled>Välj ett chattrum</option>
         {rooms && rooms.map(r => { return <option value={r}>{r}</option>})}
       </select>
-      <button className="btn" type="submit" disabled={!user || !room}>Logga in</button>
+      <button className="btn btn__light" type="submit" disabled={!user || !room}>Logga in</button>
     </form>
     )}
     </>

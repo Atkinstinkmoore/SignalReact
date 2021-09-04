@@ -1,16 +1,28 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useChat } from '../contexts/ChatContext'
 
 export default function ChatForm() {
   const {sendMessage} = useChat();
   const [message, setMessage] = useState();
-  return (
-    <form className="chat-form" onSubmit={e=>{
+
+  function submitOnEnter(e){
+    if(e.which === 13){
       e.preventDefault();
       sendMessage(message);
-      e.target.reset();
-    }}>
-      <input type="text" className="message-box" placeholder="Skriv ett meddelande"
+      let text = document.querySelector("#text-area");
+      text.value = "";
+    }
+  }
+  useEffect(() => {
+    document.querySelector("#text-area").addEventListener("keypress", submitOnEnter);
+
+    return () => {
+      document.querySelector("#text-area").removeEventListener("keypress", submitOnEnter);
+    }
+  })
+  return (
+    <form className="chat-form">
+      <textarea id="text-area" type="text" className="message-box" placeholder="Skriv ett meddelande"
       required onChange={e => setMessage(e.target.value)} autoComplete="off"/>
     </form>
   )
