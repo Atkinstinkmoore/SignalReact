@@ -33,7 +33,8 @@ export default function ChatProvider({children}) {
           const updatedChat = [...latestChat.current];
           const timeElapsed = Date.now();
           const date = new Date(timeElapsed);
-          updatedChat.push({name: user, message: message, timeStamp: `${date.getHours()}:${date.getMinutes()}`, server: server});
+          const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes().toString()  : date.getMinutes().toString()
+          updatedChat.push({name: user, message: message, timeStamp: `${date.getHours().toString()}:${minutes}`, server: server});
 
           setChat(updatedChat);
         });
