@@ -27,7 +27,7 @@ namespace SignalReact.Hubs
 
             await Groups.AddToGroupAsync(Context.ConnectionId, user.RoomName);
             var userMessage = $"Välkommen till chatten {user.UserName}";
-            await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage",botname, userMessage, true);
+            await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage",botname, userMessage, false);
 
 
         }
@@ -38,7 +38,7 @@ namespace SignalReact.Hubs
 
                 var message = $"{user.UserName} har lämnat chatten";
 
-                await Clients.Group(user.RoomName).SendAsync("RecieveMessage", botname, message, true);
+                await Clients.Group(user.RoomName).SendAsync("RecieveMessage", botname, message, false);
 
             
         }

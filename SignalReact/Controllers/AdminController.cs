@@ -26,7 +26,7 @@ namespace SignalReact.Controllers
         [HttpPost]
         public void Post([FromBody] ServerMessage message)
         {
-            _hub.Clients.All.SendAsync("RecieveMessage", "Server", message.Message, true);
+            _hub.Clients.All.SendAsync("RecieveMessage", "Server-message", message.Message, true);
         }
 
     }
