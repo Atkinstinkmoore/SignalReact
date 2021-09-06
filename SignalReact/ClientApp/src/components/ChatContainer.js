@@ -20,8 +20,11 @@ const ChatContainer = () => {
         {connection && (
             <div className="chat-container">
                 <header className="header">
-                    <h2 className="room">{room}</h2>
-                    <button className="btn btn__dark" onClick={() => logOut()}>Logga ut</button>
+                    <h1>signalReact</h1>
+                    <div className="nav">
+                        <h2 className="room">{room}</h2>
+                        <button className="btn" onClick={() => logOut()}>Logga ut</button>
+                    </div>
                 </header>
                 <main id="main" className="main">
                 <>
