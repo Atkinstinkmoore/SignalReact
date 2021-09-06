@@ -13,6 +13,7 @@ export default function ChatForm() {
       text.value = "";
     }
   }
+
   useEffect(() => {
     document.querySelector("#text-area").addEventListener("keypress", submitOnEnter);
 
@@ -21,9 +22,16 @@ export default function ChatForm() {
     }
   })
   return (
-    <form className="chat-form">
+    <form className="chat-form" onSubmit={e => {
+      e.preventDefault();
+      sendMessage(message);
+      e.target.reset();
+    }}>
       <textarea id="text-area" type="text" className="message-box" placeholder="Skriv ett meddelande"
       required onChange={e => setMessage(e.target.value)} autoComplete="off"/>
+      <button onClick={e=> {
+        submitOnEnter(e);
+      }} className="mobile-btn">▶</button>
     </form>
   )
 }
