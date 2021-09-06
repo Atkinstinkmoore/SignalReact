@@ -27,11 +27,14 @@ export default function ChatForm() {
       sendMessage(message);
       e.target.reset();
     }}>
-      <textarea id="text-area" type="text" className="message-box" placeholder="Skriv ett meddelande"
+      <textarea id="text-area" type="text" className="message-box" style={
+        message ? { height: "4em" }: {}} placeholder="Skriv ett meddelande"
       required onChange={e => setMessage(e.target.value)} autoComplete="off"/>
-      <button onClick={e=> {
-        submitOnEnter(e);
-      }} className="mobile-btn">▶</button>
+      {message &&
+        <button onClick={e=> {
+          submitOnEnter(e);
+        }} className="mobile-btn">▶</button>
+      }
     </form>
   )
 }
