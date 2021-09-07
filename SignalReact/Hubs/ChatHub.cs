@@ -19,13 +19,34 @@ namespace SignalReact.Hubs
             _db = db;
         }
 
+        public override Task OnConnectedAsync()
+        {
+            var user = _db.Users.SingleOrDefault(u => u.ID == Context.ConnectionId);
+            if(user == null)
+            {
+                user = new DbUser()
+                {
+                    ID = Context.ConnectionId
+                };
+
+                _db.Users.Add(user);
+            }
+            return base.OnConnectedAsync();
+        }
+
         public async Task JoinRoom(User user)
         {
             // Create user in "DB" based on connectionID
+            var dbUser = _db.Users.SingleOrDefault(u => u.ID == Context.ConnectionId);
+            dbUser.Name = user.UserName;
+            dbUser.Room = user.RoomName;
+
             var message = $"{user.UserName} har anslutit till chatten";
             await Clients.Group(user.RoomName).SendAsync("RecieveMessage",botname, message);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, user.RoomName);
+            await UpdateUsersInRoom(user.RoomName);
+
             var userMessage = $"Välkommen till chatten, {user.UserName}";
             await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage",botname, userMessage, false);
 
@@ -33,12 +54,17 @@ namespace SignalReact.Hubs
         }
         public async Task LeaveRoom(User user)
         {
-                //TODO: use connectionID to send message instead of relying on input
-                await Groups.RemoveFromGroupAsync(Context.ConnectionId, user.RoomName);
+            //TODO: use connectionID to send message instead of relying on input
+            var dbUser = _db.Users.SingleOrDefault(u => u.ID == Context.ConnectionId);
+            dbUser.Room = "";
+                
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, user.RoomName);
 
-                var message = $"{user.UserName} har lämnat chatten";
+            await UpdateUsersInRoom(user.RoomName);
 
-                await Clients.Group(user.RoomName).SendAsync("RecieveMessage", botname, message, false);
+            var message = $"{user.UserName} har lämnat chatten";
+
+            await Clients.Group(user.RoomName).SendAsync("RecieveMessage", botname, message, false);
 
             
         }
@@ -47,7 +73,23 @@ namespace SignalReact.Hubs
             await Clients.Group(room).SendAsync("RecieveMessage", user, message, false);
 
         }
-        //TODO: send message on disconnect, need socketID saved to user in "DB"
 
+        public async Task UpdateUsersInRoom(string room)
+        {
+            await Clients.Group(room).SendAsync("UpdateUsersInRoom");
+        }
+        //TODO: send message on disconnect, need socketID saved to user in "DB"
+        public override Task OnDisconnectedAsync(Exception exception)
+        {
+            var user = _db.Users.SingleOrDefault(u => u.ID == Context.ConnectionId);
+
+            if (user != null)
+            {
+                _db.Users.Remove(user);
+
+            }
+            
+            return base.OnDisconnectedAsync(exception);
+        }
     }
 }

@@ -4,7 +4,7 @@ import ChatForm from "./ChatForm";
 import ChatMessage from "./ChatMessage";
 
 const ChatContainer = () => {
-    const {connection, chat, room, logOut} = useChat()
+    const {connection, chat, room, logOut, usersInRoom} = useChat()
 
     useEffect(() => {
         try {
@@ -14,6 +14,10 @@ const ChatContainer = () => {
             console.error(e)
         }
     });
+
+    useEffect(() => {
+        console.table(usersInRoom);
+    }, [usersInRoom])
 
     return (
         <>

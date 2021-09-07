@@ -8,13 +8,11 @@ namespace SignalReact.Repo
 {
     public class DBplaceholder : IRepo
     {
-        public List<User> Users { get; set; }
-        public List<Room> Rooms { get; set; }
+        public List<DbUser> Users { get; set; }
 
         public DBplaceholder()
         {
-            Users = new List<User>();
-            Rooms = new List<Room>();
+            Users = new List<DbUser>();
         }
     }
 }

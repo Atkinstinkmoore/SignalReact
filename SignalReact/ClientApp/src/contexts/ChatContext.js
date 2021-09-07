@@ -9,6 +9,7 @@ export function useChat(){
 
 export default function ChatProvider({children}) {
   const [user, setUser] = useState();
+  const [usersInRoom, setUsersInRoom] = useState([])
   const [room, setRoom] = useState();
   const [chat, setChat] = useState([]);
   const latestChat = useRef(null);
@@ -21,6 +22,12 @@ export default function ChatProvider({children}) {
     .withUrl("http://localhost:16015/chat")
     .configureLogging(LogLevel.Information)
     .build();
+  }
+
+  const updateUsers = async () => {
+    const response = await fetch(`http://localhost:16015/api/room/${room}`);
+    const data = await response.json();
+    setUsersInRoom(data);
   }
 
   const joinRoom = async (user, room) => {
@@ -37,6 +44,10 @@ export default function ChatProvider({children}) {
           updatedChat.push({name: user, message: message, timeStamp: `${date.getHours().toString()}:${minutes}`, server: server});
 
           setChat(updatedChat);
+        });
+
+        connection.on("UpdateUsersInRoom", () => {
+          updateUsers();
         });
 
         await connection.invoke("JoinRoom", {userName: user, roomName: room})
@@ -73,7 +84,8 @@ const logOut = async () => {
     chat,
     connection,
     sendMessage,
-    logOut
+    logOut,
+    usersInRoom
   };
 
   return (
