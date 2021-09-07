@@ -3,7 +3,7 @@ import { useChat } from '../contexts/ChatContext'
 
 export default function ChatForm() {
   const {sendMessage} = useChat();
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState("");
 
   function submitOnEnter(e){
     if(e.which === 13){
@@ -26,6 +26,7 @@ export default function ChatForm() {
       e.preventDefault();
       sendMessage(message);
       e.target.reset();
+      setMessage("");
     }}>
       <textarea id="text-area" type="text" className="message-box" style={
         message ? { height: "4em" }: {}} placeholder="Skriv ett meddelande"
