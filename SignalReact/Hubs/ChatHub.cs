@@ -85,9 +85,11 @@ namespace SignalReact.Hubs
 
             if (user != null)
             {
+                UpdateUsersInRoom(user.Room);   
                 _db.Users.Remove(user);
 
             }
+
             
             return base.OnDisconnectedAsync(exception);
         }
