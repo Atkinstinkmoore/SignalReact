@@ -8,7 +8,6 @@ namespace SignalReact.Repo
 {
     public interface IRepo
     {
-        public List<User> Users { get; set; }
-        public List<Room> Rooms { get; set; }
+        public List<DbUser> Users { get; set; }
     }
 }
