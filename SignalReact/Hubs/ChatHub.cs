@@ -21,19 +21,19 @@ namespace SignalReact.Hubs
 
         public async Task JoinRoom(User user)
         {
-
+            // Create user in "DB" based on connectionID
             var message = $"{user.UserName} har anslutit till chatten";
             await Clients.Group(user.RoomName).SendAsync("RecieveMessage",botname, message);
 
             await Groups.AddToGroupAsync(Context.ConnectionId, user.RoomName);
-            var userMessage = $"Välkommen till chatten {user.UserName}";
+            var userMessage = $"Välkommen till chatten, {user.UserName}";
             await Clients.Client(Context.ConnectionId).SendAsync("RecieveMessage",botname, userMessage, false);
 
 
         }
         public async Task LeaveRoom(User user)
         {
-
+                //TODO: use connectionID to send message instead of relying on input
                 await Groups.RemoveFromGroupAsync(Context.ConnectionId, user.RoomName);
 
                 var message = $"{user.UserName} har lämnat chatten";
@@ -47,6 +47,7 @@ namespace SignalReact.Hubs
             await Clients.Group(room).SendAsync("RecieveMessage", user, message, false);
 
         }
+        //TODO: send message on disconnect, need socketID saved to user in "DB"
 
     }
 }
