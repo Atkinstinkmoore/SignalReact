@@ -1,7 +1,9 @@
-﻿import React, { useEffect } from "react";
+﻿import { User } from "oidc-client";
+import React, { useEffect } from "react";
 import { useChat } from "../contexts/ChatContext";
 import ChatForm from "./ChatForm";
 import ChatMessage from "./ChatMessage";
+import UserList from "./UserList";
 
 const ChatContainer = () => {
     const {connection, chat, room, logOut, usersInRoom} = useChat()
@@ -30,6 +32,7 @@ const ChatContainer = () => {
                         <button className="btn" onClick={() => logOut()}>Logga ut</button>
                     </div>
                 </header>
+                <UserList />
                 <main id="main" className="main">
                 <>
                     {chat.map(msg => {return <ChatMessage msg={msg}/>})}
