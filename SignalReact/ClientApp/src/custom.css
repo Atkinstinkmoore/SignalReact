@@ -77,16 +77,20 @@ button {
 /* end login */
 
 /* start userlist */
-
 .userlist {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  overflow-x: scroll;
-  grid-column: 1 / 2;
-  grid-row: 2 / 3;
-  background: var(--light-green);
-  border-right: 1px solid var(--dark-green);
+  display: none;
+}
+@media screen and (min-width: 45rem) {
+  .userlist {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow-x: scroll;
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    background: var(--light-green);
+    border-right: 1px solid var(--dark-green);
+  }
 }
 .userlist::-webkit-scrollbar {
   display: none;
@@ -147,7 +151,7 @@ button {
   font-size: 0.9rem;
 }
 .main {
-  grid-column: 2 / 3;
+  grid-column: 1 / 3;
   grid-row: 2 / 3;
   padding: 0 1em;
   overflow-y: scroll;
@@ -156,6 +160,7 @@ button {
   align-items: center;
   padding-bottom: 6em;
 }
+
 .main::-webkit-scrollbar {
   display: none;
 }
@@ -172,11 +177,8 @@ button {
   border-top: 1px solid var(--dark-green);
   box-shadow: 0 0 20px -5px rgba(0, 0, 0, 0.3);
 }
-
 .name-holder {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  display: none;
 }
 
 .name {
@@ -185,7 +187,7 @@ button {
 }
 
 .message-box {
-  grid-column: 2 / 3;
+  grid-column: 1 / 3;
   width: 100%;
   padding: 0.5rem 1rem;
   padding-right: 3rem;
@@ -197,6 +199,19 @@ button {
   font-size: 1.2rem;
   height: 2em;
   resize: none;
+}
+@media screen and (min-width: 45rem) {
+  .main {
+    grid-column: 2 / 3;
+  }
+  .name-holder {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  .message-box {
+    grid-column: 2 / 3;
+  }
 }
 .message-box:focus {
   box-shadow: 0 0 15px -5px rgba(0, 0, 0, 0.4);
