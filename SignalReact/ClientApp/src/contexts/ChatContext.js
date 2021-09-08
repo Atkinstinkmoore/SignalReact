@@ -38,10 +38,21 @@ export default function ChatProvider({children}) {
 
         connection.on('RecieveMessage', (user, message, server) => {
           const updatedChat = [...latestChat.current];
-          const timeElapsed = Date.now();
-          const date = new Date(timeElapsed);
-          const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes().toString()  : date.getMinutes().toString()
-          updatedChat.push({name: user, message: message, timeStamp: `${date.getHours().toString()}:${minutes}`, server: server});
+          let prevUser = null;
+          try{
+            prevUser = updatedChat[updatedChat.length - 1].name;
+          } catch(e){
+            console.error(e.message);
+          }
+          if(prevUser !== null && prevUser === user){
+            updatedChat[updatedChat.length - 1].message.push(message);
+          }
+          else{
+            const timeElapsed = Date.now();
+            const date = new Date(timeElapsed);
+            const minutes = date.getMinutes() < 10 ? "0" + date.getMinutes().toString()  : date.getMinutes().toString()
+            updatedChat.push({name: user, message: [message], timeStamp: `${date.getHours().toString()}:${minutes}`, server: server});
+          }
 
           setChat(updatedChat);
         });

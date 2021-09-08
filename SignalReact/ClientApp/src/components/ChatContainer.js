@@ -17,10 +17,6 @@ const ChatContainer = () => {
         }
     });
 
-    useEffect(() => {
-        console.table(usersInRoom);
-    }, [usersInRoom])
-
     return (
         <>
         {connection && (
