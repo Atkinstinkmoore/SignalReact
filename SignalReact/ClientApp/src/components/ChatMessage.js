@@ -6,7 +6,7 @@ export default function ChatMessage({msg}) {
         {(msg.server ?
             <div className="chat-message admin">
                 <h3>{msg.name} <i>{msg.timeStamp}</i></h3>
-                <p>{msg.message}</p>
+                {msg.message.map(m => { return <p>{m}</p>})}
             </div>
                 :
             <div className="chat-message user">
